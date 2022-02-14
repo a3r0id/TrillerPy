@@ -18,7 +18,7 @@ I plan to add more features/methods in the future.
 > `triller.get_user(username|user_id)` | Returns a dictionary with the user's info.
 
 #### Triller.get_user_videos()
-> `triller.get_user_videos(username|user_id)` | Returns a list of dictionaries with the user's videos.
+> `triller.get_user_videos(username|user_id, limit=15, before_time=None)` | Returns a list of dictionaries with the user's videos.
 
 #### Triller.comment()
 > `triller.comment(post_id, comment)` | Returns comment object or None
