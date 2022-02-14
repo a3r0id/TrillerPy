@@ -15,16 +15,16 @@ I plan to add more features/methods in the future.
 ----
 ## Methods:
 #### Triller.get_user()
-> `triller.get_user(username|user_id)`| Returns a dictionary with the user's info.
+> `triller.get_user(username|user_id)` | Returns a dictionary with the user's info.
 
 #### Triller.get_user_videos()
-> `triller.get_user_videos(username|user_id)`| Returns a list of dictionaries with the user's videos.
+> `triller.get_user_videos(username|user_id)` | Returns a list of dictionaries with the user's videos.
 
 #### Triller.comment()
-> `triller.comment(post_id, comment)`| Returns comment object or None
+> `triller.comment(post_id, comment)` | Returns comment object or None
 
 #### Triller.follow()
-> `triller.follow(username|user_id)`| Returns True or False, depending on success.
+> `triller.follow(username|user_id)` | Returns True or False, depending on success.
 
 #### Triller.unfollow()
-> `triller.unfollow(username|user_id)`| Returns True or False, depending on success.
+> `triller.unfollow(username|user_id)` | Returns True or False, depending on success.
