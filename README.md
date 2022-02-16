@@ -104,7 +104,7 @@ I plan to add more features in the future.
 
 ### Stream Object Methods:
 #### Stream.get_chat_messages() 
-> `stream.get_chat_messages(limit=128, filter_users_not_joined=False)` | Returns a list of dictionaries with the chat's messages.
+> `Stream.get_chat_messages(limit=128, filter_users_not_joined=False)` | Returns a list of dictionaries with the chat's messages.
 - `limit`: The number of messages to return.
 - `filter_users_not_joined`: If True, only messages from users that are currently in the stream will be returned.
 
