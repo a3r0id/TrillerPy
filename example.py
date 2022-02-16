@@ -24,6 +24,7 @@ print("Commented on video: {}".format(vids[0]["video_url"]))
     
 # Follow the user
 triller.follow(user)
+print("Followed user: {}".format(user))
 
 # Unfollow the user
 #triller.unfollow(user)

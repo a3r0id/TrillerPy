@@ -1,14 +1,25 @@
 from requests    import post, get
+from threading   import Thread
+
 from .structures import HTTP_Request, Me
+from .checkin    import checkinWorker
+from .live       import Live as LiveObject
 
 class Triller(object):
-    def __init__(self, username, password, suppress_output=False):
+    def __init__(self, username, password, suppress_output=False, check_in_interval_seconds=600):
         self.username        = username
         self.password        = password
         self.suppress_output = suppress_output
         self.me              = Me()
         self.user            = None
-    
+        
+        self.isLiveSession   = False
+        
+        self.check_in_interval_seconds = check_in_interval_seconds
+        self.checkin_thread  = Thread(target=checkinWorker, args=(self,))
+                
+        Live                 = None       
+        
     def log(self, message):
         if not self.suppress_output:
             print(message)
@@ -25,6 +36,8 @@ class Triller(object):
             if not self.suppress_output:            
                 self.log(f"[+] Login Successful - Code: {login['code']}")
                 self.log(f"[+] Logged in as: {self.user['username']}")
+                self.checkin_thread.start()
+                self.log(f"[+] Check-in thread started")
         else:
             if not self.suppress_output:            
                 self.log(f"[-] Login Failed - Code:  {r.status_code}")
@@ -33,19 +46,23 @@ class Triller(object):
         if live_session:
             r = post(HTTP_Request.Login.Live.uri, json={"accessToken": self.me.auth.general.token, "devicePlatform": "web"}, headers=HTTP_Request.Login.headers)
             try:
-                self.me.auth.live.result = r.json()
-                if not self.me.auth.live.result["success"]:
+                result = r.json()
+                if not result["success"]:
                     if not self.suppress_output:            
                         self.log(f"[-] Live Login Failed - Code: {r.status_code}")
                     return False
+                del result["success"]
+                self.me.auth.live.result = result["result"]
+                    
                     
                 if not self.suppress_output:
                     self.log(f"[+] Live Session Successful - Code: {r.status_code}")
-                    self.log(self.me.auth.live.result)
             except:
                 if not self.suppress_output:                
                     self.log(f"[-] Live Login Failed - Code: {r.status_code}")
                 return False
+            self.isLiveSession = True
+            self.Live = LiveObject(self)
         return True
                 
     def comment(self, post_id, comment):
@@ -149,4 +166,36 @@ class Triller(object):
                 return True
         return False
             
+    # New
+    def recommend(self, page=1, limit=15):
+        """
+        Returns list of recommended profiles or None
+        """
+        r = get(HTTP_Request.base_uri + "/v1.5/api/users/follow/recommend?page={}&limit={}".format(page, limit), headers={"Authorization": f"Bearer {self.me.auth.general.token}"})
         
+        if r.status_code == 200:
+            result = r.json()
+            if result["status"]:
+                return result["profiles"]
+            
+        return None
+    
+    # New
+    def feed(self, limit=15):
+        """
+        Returns {videos: [{}, ...], users: [{}, ...]} from feed or None
+        """
+        r = get(
+            HTTP_Request.base_uri + f"/v1.5/api/users/{self.user['user_id']}/feed?limit={limit}", 
+            headers={"Authorization": f"Bearer {self.me.auth.general.token}"})
+        if r.status_code == 200:
+            result = r.json()
+            if result["status"]:
+                return dict(
+                    users = result["users"],
+                    videos = result["videos"]
+                )
+        return None
+    
+    
+    
