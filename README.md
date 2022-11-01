@@ -1,6 +1,5 @@
 # triller-bot
-A small module to communicate with Triller's API.
-I plan to add more features in the future.
+A small module to control a user-account on Triller (Triller.co).
 
 *```I do not have any affiliation with Triller and hold no responsibility for ANYTHING caused by using this module. This is not an attempt to Adapt, alter, license, sublicense or translate the Platform (Triller/Triller.co) for personal or commercial use. Using this module is against Triller Terms of Service as it is not the intended way to access/use the Triller App/Triller.co platform and may result in legal/disciplinary actions taken against you/your account. This is merely a "proof of concept".```*
 
